@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tajbia Hossain</title>
+<meta name="description" content="Tajbia Hossain: software engineer and ML researcher working on NLP for imbalanced, low-resource and noisy text. Samsung R&D Institute Bangladesh.">
+<meta property="og:title" content="Tajbia Hossain">
+<meta property="og:description" content="Software engineer and ML researcher: NLP, class imbalance, low-resource text.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700;800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column with a wide hero; a class-imbalance histogram (the thesis subject) anchors the opener; sections indexed by a mono gutter label. */
+:root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --ink: #141a2e;
+  --muted: #586079;
+  --rule: #d3d9e4;
+  --accent: #2f3fa8;
+  --accent-soft: #dde2f7;
+  --minority: #c2771b;
+  --display: "Schibsted Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --body: "Literata", Georgia, "Times New Roman", serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1322; --surface: #171c30; --ink: #e6e9f3; --muted: #9aa2bd;
+    --rule: #2a3150; --accent: #9aa8ff; --accent-soft: #232b52; --minority: #f0a64a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1322; --surface: #171c30; --ink: #e6e9f3; --muted: #9aa2bd;
+  --rule: #2a3150; --accent: #9aa8ff; --accent-soft: #232b52; --minority: #f0a64a;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--body); font-size: 17px; line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1040px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.12; }
+
+/* top bar */
+.bar { padding-block: 20px; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.mark { font-family: var(--mono); font-size: 13px; color: var(--muted); letter-spacing: .02em; }
+nav { display: flex; gap: 18px; flex-wrap: wrap; font-family: var(--display); font-weight: 500; font-size: 15px; }
+nav a { color: var(--ink); text-decoration: none; }
+nav a:hover { color: var(--accent); }
+
+/* hero */
+.hero { display: grid; grid-template-columns: 1.35fr 1fr; gap: 48px; padding-block: 48px 64px; align-items: end; }
+.hero > * { min-width: 0; }
+.eyebrow { font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin-bottom: 18px; }
+.hero h1 { font-size: clamp(44px, 7.4vw, 84px); font-weight: 800; letter-spacing: -.035em; }
+.lede { font-size: 20px; line-height: 1.55; margin: 24px 0 0; max-width: 34em; }
+.lede em { font-style: italic; color: var(--accent); }
+.links { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  font-family: var(--mono); font-size: 13.5px; padding: 8px 14px; border: 1px solid var(--rule);
+  border-radius: 999px; background: var(--surface); color: var(--ink); text-decoration: none;
+  display: inline-flex; gap: 8px; align-items: center; cursor: pointer;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); }
+button.chip { font: inherit; font-family: var(--mono); font-size: 13.5px; }
+
+/* class imbalance figure */
+.fig { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 22px 22px 16px; }
+.fig-head { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; color: var(--muted); margin-bottom: 14px; gap: 12px; }
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 190px; border-bottom: 1px solid var(--rule); }
+.bars span { flex: 1; background: var(--accent); border-radius: 2px 2px 0 0; transform-origin: bottom; animation: grow .9s cubic-bezier(.2,.8,.2,1) both; }
+.bars span.min { background: var(--minority); }
+.bars span:nth-child(2){animation-delay:.05s}.bars span:nth-child(3){animation-delay:.1s}.bars span:nth-child(4){animation-delay:.15s}.bars span:nth-child(5){animation-delay:.2s}.bars span:nth-child(6){animation-delay:.25s}.bars span:nth-child(7){animation-delay:.3s}.bars span:nth-child(8){animation-delay:.35s}
+@keyframes grow { from { transform: scaleY(.15); } to { transform: scaleY(1); } }
+.axis { display: flex; gap: 6px; font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 6px; }
+.axis span { flex: 1; text-align: center; }
+.fig-cap { font-size: 14px; color: var(--muted); margin: 14px 0 0; line-height: 1.5; }
+.fig-cap b { color: var(--minority); font-weight: 500; }
+
+/* sections */
+section { border-top: 1px solid var(--rule); padding-block: 56px; display: grid; grid-template-columns: 180px 1fr; gap: 32px; }
+section > * { min-width: 0; }
+.idx { font-family: var(--mono); font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; padding-top: 8px; }
+.idx b { display: block; color: var(--ink); font-weight: 500; }
+section h2 { font-size: clamp(28px, 4vw, 38px); font-weight: 700; letter-spacing: -.02em; margin-bottom: 20px; }
+.prose p { max-width: 38em; margin: 0 0 16px; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.tag { font-family: var(--mono); font-size: 13px; padding: 5px 11px; background: var(--accent-soft); color: var(--ink); border-radius: 4px; }
+
+/* publications */
+.pubs { list-style: none; padding: 0; margin: 0; display: grid; gap: 18px; }
+.pub { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 22px 24px; display: grid; grid-template-columns: auto 1fr; gap: 6px 20px; }
+.pub .yr { font-family: var(--display); font-weight: 800; font-size: 28px; color: var(--accent); line-height: 1; grid-row: span 3; }
+.pub h3 { font-size: 19px; font-weight: 700; line-height: 1.3; }
+.pub .auth { font-size: 15px; color: var(--muted); }
+.pub .auth u { text-decoration: none; color: var(--ink); font-weight: 500; }
+.pub .venue { font-size: 15px; font-style: italic; }
+.kind { font-family: var(--mono); font-style: normal; font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-left: 6px; }
+
+/* experience */
+.role-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px 16px; margin-bottom: 4px; }
+.role-head h3 { font-size: 22px; font-weight: 700; }
+.when { font-family: var(--mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.org { color: var(--muted); margin: 0 0 22px; }
+.group { margin-bottom: 26px; }
+.group h4 { font-family: var(--mono); font-weight: 500; font-size: 12.5px; text-transform: uppercase; letter-spacing: .1em; color: var(--accent); margin: 0 0 10px; }
+.group ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; max-width: 42em; }
+.group li::marker { color: var(--muted); }
+
+/* patents */
+.patents { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--rule); }
+.patents li { position: relative; padding: 0 0 22px 24px; }
+.patents li::before { content: ""; position: absolute; left: -6px; top: 9px; width: 10px; height: 10px; border-radius: 50%; background: var(--bg); border: 2px solid var(--accent); }
+.patents .filed { font-family: var(--mono); font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.patents .ptitle { font-family: var(--display); font-weight: 500; font-size: 17px; line-height: 1.35; margin: 2px 0; }
+.patents .pno { font-family: var(--mono); font-size: 12.5px; }
+
+/* awards + education */
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.two > * { min-width: 0; }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px; }
+.card h3 { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+.card p { margin: 6px 0 0; font-size: 15.5px; color: var(--muted); }
+.card .when { display: block; margin-top: 2px; }
+.score { display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px; }
+.score div { font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.score b { display: block; font-family: var(--display); font-size: 26px; color: var(--ink); letter-spacing: 0; font-variant-numeric: tabular-nums; }
+.score .overall b { color: var(--accent); }
+
+/* contact */
+.contact h2 { font-size: clamp(30px, 5vw, 48px); }
+.email { font-family: var(--mono); font-size: clamp(16px, 2.6vw, 22px); user-select: all; word-break: break-all; }
+.toast { font-family: var(--mono); font-size: 13px; color: var(--accent); margin-left: 10px; }
+footer { padding-block: 28px 40px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--rule); }
+
+@media (max-width: 820px) {
+  .hero { grid-template-columns: 1fr; gap: 36px; padding-block: 24px 48px; }
+  section { grid-template-columns: 1fr; gap: 8px; padding-block: 44px; }
+  .two { grid-template-columns: 1fr; }
+  .pub { grid-template-columns: 1fr; }
+  .pub .yr { grid-row: auto; font-size: 22px; }
+}
+@media (prefers-reduced-motion: reduce) { .bars span { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <span class="mark">tajbia.hossain / NLP · systems</span>
+    <nav aria-label="Sections">
+      <a href="#research">Research</a>
+      <a href="#publications">Publications</a>
+      <a href="#experience">Experience</a>
+      <a href="#patents">Patents</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <div class="eyebrow">Software engineer &amp; ML researcher · Dhaka</div>
+      <h1>Tajbia Hossain</h1>
+      <p class="lede">I build language models that hold up when the data doesn't: <em>extreme class imbalance</em>, low-resource settings and noisy real-world text. Four years of systems engineering at Samsung R&amp;D taught me to make them run efficiently, too.</p>
+      <div class="links">
+        <a class="chip" href="https://linkedin.com/in/tajbia-hossain" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="chip" href="https://github.com/tajbiahossain" target="_blank" rel="noopener">GitHub ↗</a>
+        <a class="chip" href="mailto:tajbiahossain@gmail.com">Email</a>
+      </div>
+    </div>
+    <figure class="fig" aria-label="Illustration of an imbalanced class distribution">
+      <div class="fig-head"><span>class distribution</span><span>n = 10,000</span></div>
+      <div class="bars">
+        <span style="height:100%"></span><span style="height:74%"></span><span style="height:52%"></span><span style="height:33%"></span><span style="height:19%"></span><span class="min" style="height:9%"></span><span class="min" style="height:5%"></span><span class="min" style="height:3%"></span>
+      </div>
+      <div class="axis"><span>c1</span><span>c2</span><span>c3</span><span>c4</span><span>c5</span><span>c6</span><span>c7</span><span>c8</span></div>
+      <p class="fig-cap">Most classifiers learn the tall bars. My work focuses on the <b>short ones</b>, the underrepresented classes that real datasets are full of.</p>
+    </figure>
+  </div>
+
+  <section id="research">
+    <div class="idx"><b>Research</b>interests</div>
+    <div class="prose">
+      <h2>Robust, data-efficient representations for messy text</h2>
+      <p>My undergraduate research at AUST, supervised by Raqeebir Rab, tackled text classification on heavily imbalanced data. We combined SVD and GloVe embeddings with ensemble and deep learning models to recover performance on minority classes that standard training tends to ignore.</p>
+      <p>For graduate study I want to push this further: algorithmic frameworks that stay reliable under skewed, scarce and noisy data, and that adapt and deploy efficiently.</p>
+      <div class="tags">
+        <span class="tag">class imbalance</span><span class="tag">low-resource NLP</span><span class="tag">noisy text</span><span class="tag">parameter-efficient adaptation</span><span class="tag">semantic representations</span><span class="tag">scalable inference</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="publications">
+    <div class="idx"><b>Publications</b>2</div>
+    <div>
+      <h2>Peer-reviewed work</h2>
+      <ol class="pubs">
+        <li class="pub">
+          <span class="yr">2022</span>
+          <h3>Reducing the Effect of Imbalance in Text Classification Using SVD and GloVe with Ensemble and Deep Learning</h3>
+          <span class="auth"><u>T. Hossain</u>, H. Z. Mauni, R. Rab</span>
+          <span class="venue">Computing and Informatics, vol. 41, no. 1, pp. 98–115 <span class="kind">Journal</span></span>
+        </li>
+        <li class="pub">
+          <span class="yr">2020</span>
+          <h3>Classification of Underrepresented Text Data in an Imbalanced Dataset Using Deep Neural Network</h3>
+          <span class="auth">H. Z. Mauni, <u>T. Hossain</u>, R. Rab</span>
+          <span class="venue">Proc. IEEE Region 10 Symposium (TENSYMP), Dhaka, pp. 997–1000 <span class="kind">IEEE Xplore</span></span>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="idx"><b>Experience</b>4+ years</div>
+    <div>
+      <div class="role-head">
+        <h3>Engineer II · Lead Software Engineer</h3>
+        <span class="when">Feb 2022 – present</span>
+      </div>
+      <p class="org">Samsung R&amp;D Institute Bangladesh · promoted from Engineer I</p>
+
+      <div class="group">
+        <h4>Systems engineering</h4>
+        <ul>
+          <li>Designed the UI/UX and architected connectivity subsystems for Galaxy Book Windows apps: Camera Share (C#, WPF) and Storage Share (C#, WinUI 3).</li>
+          <li>Integrated Samsung's Multi-Connectivity Framework SDK for multi-device discovery and tuned RTP streaming pipelines for ultra-low latency.</li>
+          <li>Built secure cross-process pipelines with Named Pipes and Windows AppService across background services.</li>
+          <li>Wrote direct Win32 controllers for Bluetooth and Wi-Fi, with power-state handlers for sleep/wake transitions.</li>
+          <li>Prototyped a BLE link between Samsung's Smart Ring and Windows PCs, parsing live 3-axis accelerometer telemetry into training data for gesture-based cursor control.</li>
+          <li>Designed 100+ CPU and memory profiling suites and resolved major static analysis issues across release cycles.</li>
+        </ul>
+      </div>
+      <div class="group">
+        <h4>Leadership &amp; innovation</h4>
+        <ul>
+          <li>Owned end-to-end delivery of Camera Share and Storage Share on strict release timelines.</li>
+          <li>Co-authored patent filings on energy-efficient BLE discovery, dynamic Wi-Fi/P2P transfer thresholds and multi-device orientation sensing.</li>
+          <li>Served on the Innovation Task Force and reviewed proposals for the Mobile Developer Conference idea contest.</li>
+          <li>Mentored 3 junior engineers and supervised 2 research interns.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="patents">
+    <div class="idx"><b>Patents</b>7 filings</div>
+    <div>
+      <h2>Patent applications</h2>
+      <ol class="patents">
+        <li><div class="filed">Filed Jul 2026</div><div class="ptitle">Proposal for Reducing BLE Packet Loss in Low-Power Scanning Mode</div></li>
+        <li><div class="filed">Filed Mar 2026</div><div class="ptitle">Energy-Efficient Bluetooth Low Energy (BLE) Device Discovery</div></li>
+        <li><div class="filed">Filed Dec 2025</div><div class="ptitle">Secure Group Photo Sharing using Facial Verification at Receiving End</div></li>
+        <li><div class="filed">Filed Mar 2025</div><div class="ptitle">Efficient File Transfer System by Dynamically Determining Cut-off Threshold of File Size</div></li>
+        <li><div class="filed">Filed Aug 2023 · Republic of Korea</div><div class="ptitle">An electronic device and method for controlling the electronic device thereof</div><a class="pno" href="https://patents.google.com/patent/KR20250070416A" target="_blank" rel="noopener">KR20250070416A ↗</a></li>
+        <li><div class="filed">Filed Jun 2023 · Republic of Korea</div><div class="ptitle">Electronic device for communicating with external electronic device and storage medium thereof</div><a class="pno" href="https://patents.google.com/patent/KR20250089233A" target="_blank" rel="noopener">KR20250089233A ↗</a></li>
+        <li><div class="filed">Filed Mar 2023 · Republic of Korea</div><div class="ptitle">Method for controlling external electronic device and electronic device for supporting the same</div><a class="pno" href="https://patents.google.com/patent/KR20250024357A" target="_blank" rel="noopener">KR20250024357A ↗</a></li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="awards">
+    <div class="idx"><b>Recognition</b>awards</div>
+    <div class="two">
+      <div class="card"><h3>Outstanding Female Contributor Award</h3><span class="when">2023 · Samsung R&amp;D Bangladesh</span><p>For exemplary engineering impact and leadership.</p></div>
+      <div class="card"><h3>Excellence Award ×4</h3><span class="when">2023 – 2025 · Samsung R&amp;D Bangladesh</span><p>Q2 &amp; Q4 2023, Q2 2024, Q2 2025, for software development performance.</p></div>
+      <div class="card"><h3>Inventor Award</h3><span class="when">Jul – Sep 2023 · Samsung R&amp;D Bangladesh</span><p>For research and innovation leading to novel patent disclosures.</p></div>
+      <div class="card"><h3>High Achievers Award</h3><span class="when">2015 · The Daily Star</span><p>For academic distinction in Edexcel IGCSE examinations.</p></div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="idx"><b>Education</b>&amp; scores</div>
+    <div class="two">
+      <div class="card">
+        <h3>BSc in Computer Science and Engineering</h3>
+        <span class="when">Apr 2016 – Jan 2021</span>
+        <p>Ahsanullah University of Science and Technology (AUST)</p>
+        <p>CGPA 3.449 / 4.00 · Thesis: Text Classification using Deep Learning on Imbalanced Text Data</p>
+      </div>
+      <div class="card">
+        <h3>IELTS Academic</h3>
+        <span class="when">Oct 2026</span>
+        <div class="score">
+          <div class="overall"><b>8.0</b>Overall</div>
+          <div><b>9.0</b>Listening</div>
+          <div><b>8.5</b>Reading</div>
+          <div><b>7.5</b>Writing</div>
+          <div><b>7.5</b>Speaking</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <div class="idx"><b>Contact</b>say hello</div>
+    <div>
+      <h2>Open to graduate research opportunities</h2>
+      <p class="prose" style="margin:0 0 18px">The best way to reach me is email. References are available on request.</p>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+        <span class="email" id="email">tajbiahossain@gmail.com</span>
+        <button class="chip" id="copy" type="button">Copy</button>
+        <span class="toast" id="toast" hidden>Copied</span>
+      </div>
+      <div class="links">
+        <a class="chip" href="https://linkedin.com/in/tajbia-hossain" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a class="chip" href="https://github.com/tajbiahossain" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>© 2026 Tajbia Hossain · Dhaka, Bangladesh</footer>
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy'), toast = document.getElementById('toast'), el = document.getElementById('email');
+  function flash(t) { toast.textContent = t; toast.hidden = false; setTimeout(function () { toast.hidden = true; }, 1800); }
+  function selectText() { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); }
+  btn.addEventListener('click', function () {
+    var text = el.textContent.trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { flash('Copied'); }, function () { selectText(); flash('Selected, press Ctrl+C'); });
+    } else { selectText(); flash('Selected, press Ctrl+C'); }
+  });
+})();
+</script>
+</body>
+</html>
